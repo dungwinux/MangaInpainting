@@ -50,8 +50,10 @@ def main(mode=None):
 
 
     print('\nstart testing...\n')
-    with torch.no_grad():
-        model.test()
+    with torch.autocast(device_type="cuda"):
+    	with torch.inference_mode():
+    	    with torch.no_grad():
+                model.test()
 
 
 
@@ -84,6 +86,7 @@ def load_config(mode=None):
 
     # load config file
     config = Config(config_path)
+    config.print()
 
     config.MODEL = args.model if args.model is not None else 4
     config.INPUT_SIZE = 0
